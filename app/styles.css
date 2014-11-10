@@ -1,0 +1,11 @@
+body {
+  font: 14px sans-serif;
+}
+
+text {
+	fill: white;
+}
+
+.arc path {
+  stroke: #fff;
+}

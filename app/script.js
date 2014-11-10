@@ -31,11 +31,11 @@ d3.csv('data.csv', function (error, data) {
 
   g.append("path")
       .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.id); });
+      .style("fill", function(d) { return color(d.data.type); });
 
   g.append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
       .attr("dy", ".35em")
       .style("text-anchor", "middle")
-      .text(function(d) { return d.data.id; });
+      .text(function(d) { return d.data.type; });
 });
