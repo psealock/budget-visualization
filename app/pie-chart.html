@@ -40,7 +40,7 @@
                   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
             },
             drawChart: function (error, data) {
-              var me = document.querySelector('pie-chart');
+              var me = this;
 
               data.forEach(function(d) {
                   d.amount = +d.amount;
@@ -70,7 +70,9 @@
             },
             urlChanged: function (oldValue, newValue) {
               var me = this;
-              d3.csv(newValue, me.drawChart);
+              d3.csv(newValue, function (error, data) {
+                me.drawChart(error, data);
+              });
             }
             // use Polymers ajax
             // getData: function () {}
