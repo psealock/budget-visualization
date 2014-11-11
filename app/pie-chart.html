@@ -1,58 +1,84 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<polymer-element name="pie-chart" attributes="">
+<polymer-element name="pie-chart" attributes="url">
     <template>
         <style>
             :host {
                 display: block;
             }
+            text {
+              fill: white;
+            }
+
+            .arc path {
+              stroke: #fff;
+            }
         </style>
-        <svg></svg>
+        <svg id="svg"></svg>
     </template>
     <script>
         Polymer({
+            createElements: function () {
+              var width = 960,
+                  height = 500,
+                  radius = Math.min(width, height) / 2;
+
+              this.color = d3.scale.ordinal()
+                  .range(["green", "orange", "blue", "red"]);
+
+              this.arc = d3.svg.arc()
+                  .outerRadius(radius - 10)
+                  .innerRadius(0);
+
+              this.pie = d3.layout.pie()
+                  .sort(null)
+                  .value(function(d) { return d.amount; });
+
+              this.svg = d3.select(this.$.svg)
+                  .attr("width", width)
+                  .attr("height", height)
+                .append("g")
+                  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+            },
+            drawChart: function (error, data) {
+              var me = document.querySelector('pie-chart');
+
+              data.forEach(function(d) {
+                  d.amount = +d.amount;
+              });
+
+              me.g = me.svg.selectAll(".arc")
+                  .data(me.pie(data))
+                .enter().append("g")
+                  .attr("class", "arc");
+
+              me.g.append("path")
+                  .attr("d", me.arc)
+                  .style("fill", function(d) { return me.color(d.data.type); });
+
+              me.g.append("text")
+                  .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; })
+                  .attr("dy", ".35em")
+                  .style("text-anchor", "middle")
+                  .text(function(d) { return d.data.type; });
+            },
             domReady: function () {
-                var width = 960,
-                    height = 500,
-                    radius = Math.min(width, height) / 2;
+              var me = this;
 
-                var color = d3.scale.ordinal()
-                    .range(["green", "orange", "blue", "red"]);
+              this.createElements();
 
-                var arc = d3.svg.arc()
-                    .outerRadius(radius - 10)
-                    .innerRadius(0);
-
-                var pie = d3.layout.pie()
-                    .sort(null)
-                    .value(function(d) { return d.amount; });
-
-                var svg = d3.select("body").append("svg")
-                    .attr("width", width)
-                    .attr("height", height)
-                  .append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-                d3.csv('data.csv', function (error, data) {
-                    data.forEach(function(d) {
-                        d.amount = +d.amount;
-                    });
-
-                  var g = svg.selectAll(".arc")
-                      .data(pie(data))
-                    .enter().append("g")
-                      .attr("class", "arc");
-
-                  g.append("path")
-                      .attr("d", arc)
-                      .style("fill", function(d) { return color(d.data.type); });
-
-                  g.append("text")
-                      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-                      .attr("dy", ".35em")
-                      .style("text-anchor", "middle")
-                      .text(function(d) { return d.data.type; });
-                });
+              d3.csv(me.url, me.drawChart);
+            },
+            urlChanged: function (oldValue, newValue) {
+              var me = this;
+              d3.csv(newValue, me.drawChart);
             }
+            // use Polymers ajax
+            // getData: function () {}
+            
+            //redraw graph on data changed
+            // dataChanged: function () {}
+
+            //make sliders to illustrate data-binding
         });
     </script>
 </polymer-element>
