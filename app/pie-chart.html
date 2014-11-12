@@ -14,8 +14,12 @@
             }
         </style>
         <template repeat="{{d in data}}">
-          <p><label for="input">{{d.type}}</label>
-          <input id="input" type="range" value="{{d.amount}}" min="0" max="500" on-input="{{refreshChart}}"> ${{d.amount}}</p>
+          <p><label for="input">{{d.type}}: </label>
+          <input id="input"
+          type="range"
+          value="{{d.amount}}"
+          min="0" max="500"
+          on-input="{{refreshChart}}"> ${{d.amount}}</p>
         </template>
         <svg id="svg"></svg>
     </template>
@@ -43,15 +47,6 @@
                 .append("g")
                   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
             },
-            refreshChart: function () {
-              var me = this;
-
-              me.g.data(me.pie(me.data))
-                .select("path").attr("d", me.arc);
-
-              me.g.select("text")
-                .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; });
-            },
             drawChart: function () {
               var me = this;
 
@@ -73,6 +68,15 @@
                   .attr("dy", ".35em")
                   .style("text-anchor", "middle")
                   .text(function(d) { return d.data.type; });
+            },
+            refreshChart: function () {
+              var me = this;
+
+              me.g.data(me.pie(me.data))
+                .select("path").attr("d", me.arc);
+
+              me.g.select("text")
+                .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; });
             },
             getData: function () {
               var me = this;
