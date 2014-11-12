@@ -13,6 +13,8 @@
               stroke: #fff;
             }
         </style>
+        <label for="groceriesInput">Groceries:</label>
+        <input id="groceriesInput" type="range" value="{{groceries}}" min="0" max="500"> ${{groceries}}
         <svg id="svg"></svg>
     </template>
     <script>
@@ -75,6 +77,11 @@
             urlChanged: function (oldValue, newValue) {
               if(newValue && oldValue) {
                 this.getData();
+              }
+            },
+            groceriesChanged: function (oldValue, newValue) {
+              if(newValue && oldValue) {
+                var me = this;
               }
             }
         });
