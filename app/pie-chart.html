@@ -8,25 +8,33 @@
             text {
               fill: white;
             }
-
+            .controls {
+              display: inline-block;
+            }
+            svg {
+              float: right;
+              margin: 0 20px 0 0;
+            }
             .arc path {
               stroke: #fff;
             }
         </style>
-        <template repeat="{{d in data}}">
-          <p><label for="input">{{d.type}}: </label>
-          <input id="input"
-          type="range"
-          value="{{d.amount}}"
-          min="0" max="500"
-          on-input="{{refreshChart}}"> ${{d.amount}}</p>
-        </template>
+        <div class="controls">
+          <template repeat="{{d in data}}">
+            <p><label for="input">{{d.type}}: </label>
+            <input id="input"
+            type="range"
+            value="{{d.amount}}"
+            min="0" max="500"
+            on-input="{{refreshChart}}"> ${{d.amount}}</p>
+          </template>
+        </div>
         <svg id="svg"></svg>
     </template>
     <script>
         Polymer({
             createElements: function () {
-              var width = 960,
+              var width = 500,
                   height = 500,
                   radius = Math.min(width, height) / 2;
 
