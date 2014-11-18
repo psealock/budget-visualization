@@ -1,4 +1,4 @@
-<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 <polymer-element name="pie-chart" attributes="url">
     <template>
         <style>
@@ -29,11 +29,13 @@
             min="0" max="500"
             on-input="{{refreshChart}}"> ${{d.amount}}</p>
           </template>
+          <p>Total: ${{total}}</p>
         </div>
         <svg id="svg"></svg>
     </template>
     <script>
         Polymer({
+            total: 0,
             createElements: function () {
               var width = 500,
                   height = 500,
@@ -59,7 +61,7 @@
             drawChart: function () {
               var me = this;
 
-              me.data.forEach(function(d) {
+              me.data.forEach(function (d) {
                 d.amount = +d.amount;
               });
 
@@ -77,6 +79,8 @@
                   .attr("dy", ".35em")
                   .style("text-anchor", "middle")
                   .text(function(d) { return d.data.type; });
+
+              me.computeTotal();
             },
             refreshChart: function () {
               var me = this;
@@ -86,12 +90,22 @@
 
               me.g.select("text")
                 .attr("transform", function(d) { return "translate(" + me.arc.centroid(d) + ")"; });
+
+              me.total = 0;
+              me.computeTotal();
             },
             getData: function () {
               var me = this;
               d3.csv(me.url, function (error, data) {
                 me.data = data;
                 me.drawChart();
+              });
+            },
+            computeTotal: function () {
+              var me = this;
+              this.data.forEach(function (d) {
+                d.amount = +d.amount;
+                me.total += d.amount;
               });
             },
             domReady: function () {
