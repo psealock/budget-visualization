@@ -61,9 +61,6 @@
 						missedResults.push(item);
 					}
 				});
-				console.log(results);
-				console.log("income is ",income);
-				console.log(missedResults);
 
 				for(prop in results) {
 					if(results.hasOwnProperty(prop)) {
@@ -76,11 +73,6 @@
 				}
 
 				this.processedData = processedData;
-			},
-			dataChanged: function (oldValue, newValue) {
-				if(newValue) {
-					// this.fire('data:changed');
-				}
 			},
 			processedDataChanged: function (oldValue, newValue) {
 				if(newValue) {
