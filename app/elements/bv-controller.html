@@ -1,0 +1,29 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<polymer-element name="bv-controller" attributes="url">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+	</template>
+	<script>
+		Polymer({
+			data: null,
+			getData: function () {
+				var me = this;
+				d3.csv(me.url, function (error, data) {
+					me.data = data;
+				});
+			},
+			dataChanged: function (oldValue, newValue) {
+				if(newValue) {
+					this.fire('data:changed');
+				}
+			},
+			domReady: function () {
+				this.getData();
+			}
+		});
+	</script>
+</polymer-element>

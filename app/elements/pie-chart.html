@@ -94,13 +94,6 @@
               me.total = 0;
               me.computeTotal();
             },
-            getData: function () {
-              var me = this;
-              d3.csv(me.url, function (error, data) {
-                me.data = data;
-                me.drawChart();
-              });
-            },
             computeTotal: function () {
               var me = this;
               this.data.forEach(function (d) {
@@ -109,8 +102,14 @@
               });
             },
             domReady: function () {
+              var me = this,
+                cntrl = document.querySelector('bv-controller');
+
+              cntrl.addEventListener('data:changed', function () {
+                me.data = cntrl.data;
+                me.drawChart();
+              });
               this.createElements();
-              this.getData();
             },
             urlChanged: function (oldValue, newValue) {
               if(newValue && oldValue) {

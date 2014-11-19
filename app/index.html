@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
-  <script src="bower_components/platform/platform.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
   
   <script src="http://d3js.org/d3.v3.min.js"></script>
 
   <link rel="import" href="elements/pie-chart.html">
+  <link rel="import" href="elements/bv-controller.html">
   
   <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
 </head>
 <body>
+
+<bv-controller
+url="data.csv"></bv-controller>
 
 <pie-chart 
 url="data.csv"></pie-chart>
