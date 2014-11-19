@@ -105,8 +105,8 @@
               var me = this,
                 cntrl = document.querySelector('bv-controller');
 
-              cntrl.addEventListener('data:changed', function () {
-                me.data = cntrl.data;
+              cntrl.addEventListener('processedData:changed', function () {
+                me.data = cntrl.processedData;
                 me.drawChart();
               });
               this.createElements();

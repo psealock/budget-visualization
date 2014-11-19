@@ -29,16 +29,14 @@
 			processData: function (data) {
 				var me = this,
 					missedResults = [],
+					income = 0,
+					processedData = [],
 					results = {};
 
 				data.forEach(function (item) {
 					var amount = parseInt(item.amount, 10);
 					if(!item.counted && amount > 0) {
-						if(results['income'] === undefined){
-							results['income'] = amount;
-						}else {
-							results['income'] += amount;
-						}
+						income += amount;
 						item.counted = true;
 					}
 					if(!item.counted){
@@ -58,16 +56,35 @@
 					}
 				});
 
-				console.log(results);
 				data.forEach(function (item) {
 					if(!item.counted) {
-						console.log(item);
+						missedResults.push(item);
 					}
 				});
+				console.log(results);
+				console.log("income is ",income);
+				console.log(missedResults);
+
+				for(prop in results) {
+					if(results.hasOwnProperty(prop)) {
+						var obj = {};
+						obj.type = prop;
+						obj.amount = results[prop];
+
+						processedData.push(obj);
+					}
+				}
+
+				this.processedData = processedData;
 			},
 			dataChanged: function (oldValue, newValue) {
 				if(newValue) {
 					// this.fire('data:changed');
+				}
+			},
+			processedDataChanged: function (oldValue, newValue) {
+				if(newValue) {
+					this.fire('processedData:changed');
 				}
 			},
 			domReady: function () {
