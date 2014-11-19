@@ -10,15 +10,64 @@
 	<script>
 		Polymer({
 			data: null,
+			catergories: ['rent', 'groceries', 'restaurant', 'cash', 'car', 'entertainment', 'goods', 'utilities'],
+			rent: ['rent'],
+			cash: ['Atm Debit'],
+			car: ['Truckst', 'parking', 'bp brooklyn'],
+			utilities: ['vodafone', 'post', 'Twl 134 Wellington'],
+			entertainment: ['evolution', 'evo online', 'bike', 'karori sanctuary', 'Waterfront Hire & To'],
+			groceries: ['New World', 'Moore Wilsons', 'Trade Aid', 'Countdown', 'Commonsense Organics', 'Wairarapa Eco Farm', 'Pak N Save', 'fruit supply', 'foodmart', 'foodmarket', 'mart'],
+			restaurant: ['restaurant', 'restau', 'resturant', 'roast', 'cha', 'cellar room', 'sushi', 'ramen', 'takeaway', 'cafe', 'Deli', 'Bakery', 'Udon', 'malaysian', 'gelato', 'pan de muerto', "Jo'S"],
+			goods: ['recycling', 'mirrou', 'warehous', 'dotti', 'Coin Save', 'Rainbow Bridges Ltd'],
 			getData: function () {
 				var me = this;
 				d3.csv(me.url, function (error, data) {
 					me.data = data;
+					me.processData(data);
+				});
+			},
+			processData: function (data) {
+				var me = this,
+					missedResults = [],
+					results = {};
+
+				data.forEach(function (item) {
+					var amount = parseInt(item.amount, 10);
+					if(!item.counted && amount > 0) {
+						if(results['income'] === undefined){
+							results['income'] = amount;
+						}else {
+							results['income'] += amount;
+						}
+						item.counted = true;
+					}
+					if(!item.counted){
+						me.catergories.forEach(function (cat) {
+							if(results[cat] === undefined) {
+								results[cat] = 0;
+							}
+							me[cat].forEach(function (match) {
+								var re = new RegExp(match, 'gi');
+								if(item.card.match(re) || item.details.match(re) || item.type.match(re) || item.id.match(re)) {
+									item.amount = amount;
+									results[cat] += -(item.amount);
+									item.counted = true;
+								}
+							});
+						});
+					}
+				});
+
+				console.log(results);
+				data.forEach(function (item) {
+					if(!item.counted) {
+						console.log(item);
+					}
 				});
 			},
 			dataChanged: function (oldValue, newValue) {
 				if(newValue) {
-					this.fire('data:changed');
+					// this.fire('data:changed');
 				}
 			},
 			domReady: function () {
