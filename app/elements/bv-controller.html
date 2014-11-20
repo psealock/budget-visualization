@@ -6,19 +6,28 @@
 				display: block;
 			}
 		</style>
+		<section>
+			<pie-chart pieData="{{processedData}}"></pie-chart>
+		</section>
+		<section>
+			<template repeat="{{item in missedResults}}">
+				<leftover-item data="{{item}}" catergories="{{catergories}}"></leftover-item>
+			</template>
+		</section>
 	</template>
 	<script>
 		Polymer({
 			data: null,
-			catergories: ['rent', 'groceries', 'restaurant', 'cash', 'car', 'entertainment', 'goods', 'utilities'],
+			catergories: ['rent', 'groceries', 'restaurant', 'cash', 'car', 'entertainment', 'goods', 'utilities', 'childcare'],
+			childcare: ['becc'],
 			rent: ['rent'],
 			cash: ['Atm Debit'],
-			car: ['Truckst', 'parking', 'bp brooklyn'],
+			car: ['Truckst', 'parking', 'bp brooklyn', 'Bp Connect', 'caltex'],
 			utilities: ['vodafone', 'post', 'Twl 134 Wellington'],
-			entertainment: ['evolution', 'evo online', 'bike', 'karori sanctuary', 'Waterfront Hire & To'],
-			groceries: ['New World', 'Moore Wilsons', 'Trade Aid', 'Countdown', 'Commonsense Organics', 'Wairarapa Eco Farm', 'Pak N Save', 'fruit supply', 'foodmart', 'foodmarket', 'mart'],
-			restaurant: ['restaurant', 'restau', 'resturant', 'roast', 'cha', 'cellar room', 'sushi', 'ramen', 'takeaway', 'cafe', 'Deli', 'Bakery', 'Udon', 'malaysian', 'gelato', 'pan de muerto', "Jo'S"],
-			goods: ['recycling', 'mirrou', 'warehous', 'dotti', 'Coin Save', 'Rainbow Bridges Ltd'],
+			entertainment: ['evolution', 'evo online', 'bike', 'karori sanctuary', 'Waterfront Hire & To', 'zoo', 'sports', 'cinema'],
+			groceries: ['New World', 'Moore Wilsons', 'Trade Aid', 'Countdown', 'Commonsense Organics', 'Wairarapa Eco Farm', 'Pak N Save', 'fruit supply', 'foodmart', 'foodmarket', 'mart', 'food'],
+			restaurant: ['restaurant', 'restau', 'resturant', 'roast', 'cha', 'cellar room', 'sushi', 'kebab', 'ramen', 'takeaway', 'cafe', 'Deli', 'Bakery', 'Udon', 'malaysia', 'gelato', 'pan de muerto', "Jo'S", 'espresso', 'satay', 'jolt', 'bar', 'wasabi', 'coffee', 'korean'],
+			goods: ['recycling', 'mirrou', 'warehous', 'dotti', 'Coin Save', 'Rainbow Bridges Ltd', 'recycle', 'bunnings', 'salvation'],
 			getData: function () {
 				var me = this;
 				d3.csv(me.url, function (error, data) {
@@ -73,11 +82,10 @@
 				}
 
 				this.processedData = processedData;
+				this.missedResults = missedResults;
 			},
-			processedDataChanged: function (oldValue, newValue) {
-				if(newValue) {
-					this.fire('processedData:changed');
-				}
+			updateProcessedData: function (data) {
+				this.fire('update:processedData', data);
 			},
 			domReady: function () {
 				this.getData();

@@ -1,9 +1,10 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<polymer-element name="pie-chart">
+<polymer-element name="pie-chart" attributes="pieData">
     <template>
         <style>
             :host {
                 display: block;
+                height: 500px;
             }
             text {
               fill: white;
@@ -102,18 +103,18 @@
               });
             },
             domReady: function () {
-              var me = this,
-                cntrl = document.querySelector('bv-controller');
-
-              cntrl.addEventListener('processedData:changed', function () {
-                me.data = cntrl.processedData;
-                me.drawChart();
+              var me = this;
+              this.cntrl = document.querySelector('bv-controller');
+              this.cntrl.addEventListener('update:processedData', function (e) {
+                me.pieData = e.detail;
+                me.refreshChart();
               });
               this.createElements();
             },
-            urlChanged: function (oldValue, newValue) {
-              if(newValue && oldValue) {
-                this.getData();
+            pieDataChanged: function (oldValue, newValue) {
+              if(newValue) {
+                this.data = newValue;
+                this.drawChart();
               }
             }
         });

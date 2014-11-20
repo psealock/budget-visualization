@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<polymer-element name="leftover-item" attributes="data catergories">
+	<template>
+		<style>
+			:host {
+				display: block;
+				transition: height 400ms ease-in-out, opacity 400ms ease-in-out;
+				height: 40px;
+				opacity: 1;
+			}
+			:host(.delete) {
+				height: 0;
+				opacity: 0;
+			}
+			section {
+				margin: 5px 0;
+				display: inline-block;
+				border-bottom: 1px solid lightgray;
+				background: bisque;
+				padding: 5px 0;
+			}
+			div {
+				display: inline-block;
+				width: 75px;
+				padding: 0 5px;
+			}
+			div.details {
+				width: 200px;
+			}
+			div.date {
+				width: 100px;
+			}
+			div.choose {
+				width: 135px;
+			}
+		</style>
+		<section>
+			<div class="type">{{data.type}}</div>
+			<div class="details">{{data.details}}</div>
+			<div class="date">{{data.date}}</div>
+			<div class="amount">{{data.amount}}</div>
+			<div class="choose">
+				<select id="selected" name="select" on-input="{{addItem}}">
+				  <option value="" disabled selected>Choose a catergory</option>
+				  <template repeat="{{cat in catergories}}">
+				  	<option value="{{cat}}">{{cat}}</option>
+				  </template>
+				</select>
+			</div>
+		</section>
+	</template>
+	<script>
+		Polymer({
+			addItem: function () {
+				var catergory = this.$.selected.value,
+					index = this.cntrl.missedResults.indexOf(this.data);
+
+				// this.className += ' delete';
+
+				var dataArray = this.cntrl.processedData;
+				for (var i = 0; i < dataArray.length; i++) {
+					if(dataArray[i].type === catergory) {
+						dataArray[i].amount += -this.data.amount;
+					}
+				}
+
+				this.cntrl.missedResults.splice(index, 1);
+				this.cntrl.updateProcessedData(dataArray);
+			},
+			domReady: function () {
+				this.cntrl = document.querySelector('bv-controller');
+			}
+		});
+	</script>
+</polymer-element>
