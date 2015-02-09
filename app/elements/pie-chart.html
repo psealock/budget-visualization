@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 <polymer-element name="pie-chart" attributes="pieData">
     <template>
         <style>
@@ -43,7 +43,7 @@
                   radius = Math.min(width, height) / 2;
 
               this.color = d3.scale.ordinal()
-                  .range(["green", "orange", "blue", "red"]);
+                  .range(["green", "orange", "blue", "red", "brown"]);
 
               this.arc = d3.svg.arc()
                   .outerRadius(radius - 10)

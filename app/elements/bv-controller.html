@@ -1,4 +1,4 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 <polymer-element name="bv-controller" attributes="url">
 	<template>
 		<style>
@@ -8,6 +8,7 @@
 		</style>
 		<section>
 			<pie-chart pieData="{{processedData}}"></pie-chart>
+			<!-- <pie-chart pieData="{{income}}"></pie-chart> -->
 		</section>
 		<section>
 			<template repeat="{{item in missedResults}}">
@@ -38,14 +39,14 @@
 			processData: function (data) {
 				var me = this,
 					missedResults = [],
-					income = 0,
+					income = [],
 					processedData = [],
 					results = {};
 
 				data.forEach(function (item) {
 					var amount = parseInt(item.amount, 10);
 					if(!item.counted && amount > 0) {
-						income += amount;
+						income.push(item);
 						item.counted = true;
 					}
 					if(!item.counted){
@@ -83,6 +84,7 @@
 
 				this.processedData = processedData;
 				this.missedResults = missedResults;
+				this.income = income;
 			},
 			updateProcessedData: function (data) {
 				this.fire('update:processedData', data);
